@@ -36,6 +36,7 @@ app.options('*', cors())
 app.use(passport.initialize())
 
 const uri = keys.ATLAS_URI;
+mongoose.set('strictQuery', true)
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
     if (err) console.log("Error connecting to DB... " + err)
 })
@@ -44,8 +45,6 @@ const connection = mongoose.connection;
 connection.once("open", async () => console.log("DB connection made ..."))
 
 routes.loadRoutes(app)
-
-console.log(keys)
 
 const port = keys.PORT || 5001;
 http.listen(port, () => console.log('Server running... on port: ' + port))
