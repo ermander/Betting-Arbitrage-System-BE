@@ -45,6 +45,8 @@
         "@/resources": "dist/resources",
         "@/utils": "dist/utils",
         "@/middlewares": "dist/middlewares",
-        "@/models": "dist/models"
+        "@/models": "dist/models",
+        "@/crons": "dist/crons",
+        "@/controllers": "dist/controllers"
     }
 }
