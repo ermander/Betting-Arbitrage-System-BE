@@ -1,4 +1,4 @@
-import PostModel from '@/resources/post/post.model';
+import PostModel from '@/models/post.model';
 import Post from '@/resources/post/post.interface';
 
 class PostService {
