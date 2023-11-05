@@ -19,6 +19,30 @@ async function authenticated(
     }
 
     const accessToken = bearer.split('Bearer ')[1].trim();
+
+    try {
+        const payload: Token | jwt.JwtPayload = await verifyToken(accessToken);
+
+        if (payload instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({
+                message: 'Unauthorized',
+            });
+        }
+
+        const user = await UserModel.findById(payload.id)
+            .select('-password')
+            .exec();
+
+        if (!user) {
+            return next(new HttpException(401, 'Unauthorized'));
+        }
+
+        req.user = user;
+
+        return next();
+    } catch (error: any) {
+        next(new HttpException(401, error.message));
+    }
 }
 
 export default authenticated;
