@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import Controller from '@/utils/interfaces/controller.interface';
 import ErrorMiddleware from '@/middlewares/error.middleware';
 import helmet from 'helmet';
+import startCrons from '@/crons/index';
 
 class App {
     public express: Application;
@@ -19,6 +20,7 @@ class App {
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
         this.initializeErrorHandling();
+        this.initializeCronJobs();
     }
 
     private initializeMiddlewares(): void {
@@ -53,6 +55,10 @@ class App {
             .catch((error) => {
                 console.log(error);
             });
+    }
+
+    private initializeCronJobs(): void {
+        startCrons();
     }
 
     public listen(): void {
