@@ -1,8 +1,62 @@
-console.log('Hello World!');
+const axios = require('axios');
+const fs = require('fs');
 
-// Chiamata per ottenere l'alberatura prematch di Sisal
+/**
+ * Chiamata per richiedere tutti gli eventi prematch
+ * GET - https://api2.cplay.it/api/Palinsesto/GetAllEventsPrematch
+ */
 
-// Chiamata per ottenere i dettagli di un evento
-// https://betting.sisal.it/api/lettura-palinsesto-sport/palinsesto/prematch/schedaManifestazione/0/1-209?offerId=0
-// schedaManifestazione/0/ => 1, il numero dopo lo slash è l'id della tipologia di sport
-// 1-209 => 209, il numero dopo il trattino è l'id della manifestazione
+/**  Chiamata per richiedere le quote principali
+"https://api2.cplay.it/api/Palinsesto_V3/GetManifestazioneCore?v=5f1bc66dee3b67a1952288191226f9a45f1a32c9c8ee3cbc55c7517b8757882b"
+ Request body:
+    {
+        "BetTypeIdString": null,
+        "DateFrom": null,
+        "DateTo": null,
+        "GroupId": 33,
+        "IndexDateTo": null,
+        "TypeOnly": false,
+        "isQuery": false
+    }
+*/
+
+// async function fetchEPlayOdds() {
+//     try {
+//         const { data: response } = await axios.get(
+//             'https://api2.cplay.it/api/Palinsesto/GetAllEventsPrematch',
+//         );
+
+//         const palinsesto = new Map();
+
+//         response
+//             .filter((e) => e.Sport_Desc === 'Calcio')
+//             .forEach((match) => {
+//                 const { Category_Desc, Group_Name, Group_id } = match;
+
+//                 if (!palinsesto.has(Category_Desc)) {
+//                     palinsesto.set(Category_Desc, []);
+//                 }
+
+//                 const categoryMap = palinsesto.get(Category_Desc);
+
+//                 const existingGroup = categoryMap.find(
+//                     (group) => group.Group_id === Group_id,
+//                 );
+
+//                 if (existingGroup) {
+//                     existingGroup.matches.push(match);
+//                 } else {
+//                     categoryMap.push({
+//                         Group_id,
+//                         Group_Name,
+//                         matches: [match],
+//                     });
+//                 }
+//             });
+//         console.log(palinsesto);
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
+// fetchEPlayOdds();

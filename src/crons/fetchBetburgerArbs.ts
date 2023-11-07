@@ -2,6 +2,11 @@ import axios from 'axios';
 import Telegram from '@/utils/functions/telegram';
 
 async function fetchBetBurger(): Promise<void> {
+    const telegramBot = new Telegram(
+        process.env.TELEGRAM_TOKEN!,
+        process.env.TELEGRAM_CHAT_ID!,
+    );
+
     try {
         const access_token: string = 'f79c74c2dd0d40ff388c670f7efe7445';
         const locale: string = 'en';
@@ -61,11 +66,6 @@ async function fetchBetBurger(): Promise<void> {
 
         const arbs: any[] = dataResponse.arbs;
 
-        const telegramBot = new Telegram(
-            process.env.TELEGRAM_TOKEN!,
-            process.env.TELEGRAM_CHAT_ID!,
-        );
-
         arbs.forEach((arb: any, i: number) => {
             let { bet1_id, bet2_id, bet3_id } = arb;
             const bet1 = dataResponse.bets.find(
@@ -77,27 +77,20 @@ async function fetchBetBurger(): Promise<void> {
             const bet3 = dataResponse.bets.find(
                 (bet: any) => bet.id === bet3_id,
             );
-            if (i === 0) {
-                telegramBot.sendNotification({
-                    arb,
-                    bet1,
-                    bet2,
-                    bet3,
-                });
-            }
+            telegramBot.sendNotification({
+                arb,
+                bet1,
+                bet2,
+                bet3,
+            });
         });
 
         return;
     } catch (error: any) {
         console.log("C'è stato un errore in fetchBetBurger cron job", error);
-        return;
-    }
-}
-
-async function sendTelegramNotification(data: any): Promise<void> {
-    try {
-    } catch (error: any) {
-        console.log("C'è stato un errore in sendTelegramNotification", error);
+        telegramBot.sendGeneralNotification(
+            "C'è stato un errore in fetchBetBurger cron job: " + error,
+        );
         return;
     }
 }
