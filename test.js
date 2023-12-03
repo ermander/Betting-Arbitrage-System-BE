@@ -71,7 +71,7 @@ async function testProxy() {
     }
 }
 
-testProxy();
+// testProxy();
 
 async function fetchEPlayOdds() {
     try {
@@ -149,3 +149,34 @@ async function fetchEPlayOdds() {
         console.log(error);
     }
 }
+
+const cookie = `cookieconsent_status=dismiss; wordpress_test_cookie=WP%20Cookie%20check; flarum_remember=MEGlSoj3QvKhdCS27xAbIlWNPaMKWjxmUNzbeBvn; _lscache_vary=a2564fcd5bc784b7ce399f6ea4cc0fda; wordpress_logged_in_fa686efef513bdb6e3e44099da671de0=ermander%7C1701778536%7CjQ0ZGhqD9iQHsO58BTrPMMu91IPFva4Rh7qCFvcffpq%7C0cb9a71a353437e199ff362f3c7227fa37f274e75d9667d425c08489869ccdac`;
+
+async function fetchRobinsOddsOddsmatcher() {
+    const { data: response } = await axios.get(
+        'https://robinodds.it/api/odds/v2/index.php?id_book=',
+        {
+            headers: {
+                cookie,
+            },
+        },
+    );
+
+    const odds = response.filter((odd, i) => {
+        const { back_odd, lay_odd } = odd;
+        const lay_stake = (back_odd * 1000) / (lay_odd - 0.045);
+        const profit = lay_stake * (1 - 0.045) - 1000;
+
+        const roi = (profit - 1000) / 1000;
+        const percent = roi * 100;
+        console.log(percent);
+        // console.log(profit);
+        // if (profit > 0) {
+        //     console.log(odd);
+        // }
+    });
+
+    //console.log('response', response);
+}
+
+fetchRobinsOddsOddsmatcher();
