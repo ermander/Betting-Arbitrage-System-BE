@@ -1,6 +1,6 @@
 module.exports = {
-    Username: 'ermander',
-    Password: 'Wirammstein97',
+    Username: process.env.OXYLABS_USER,
+    Password: process.env.OXYLABS_PASSWORD,
     Timeout: 5,
     RequestsRate: 10,
     RetriesNum: 3,
