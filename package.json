@@ -60,6 +60,7 @@
         "@/models": "dist/models",
         "@/crons": "dist/crons",
         "@/controllers": "dist/controllers",
-        "@/assets": "dist/assets"
+        "@/assets": "dist/assets",
+        "@/constants": "dist/constants"
     }
 }
