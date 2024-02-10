@@ -2,6 +2,7 @@ import axios from 'axios';
 import Telegram from '@/utils/functions/telegram';
 import RobinOddsBookmakersEnum from '@/constants/robinOddsBookmakersEnum';
 import sleep from '@/utils/functions/sleep';
+import moment from 'moment';
 
 const telegramBot = new Telegram(
     process.env.TELEGRAM_TOKEN!,
@@ -17,7 +18,7 @@ const telegramBot = new Telegram(
  *
  */
 
-const cookie = `cookieconsent_status=dismiss; flarum_remember=jorxQ95TANmA9QatWUW9ghgxqvJOp7llWC0KrEKY; wordpress_logged_in_fa686efef513bdb6e3e44099da671de0=ermander%7C1707685484%7CfGwNfaCaf6jFRFpf5lUUJJtfVPx29zo4I6k1FdV9Q5L%7C4be6ae361aa461ccd28c3b10f9fd42d0ad1e03b3e8de74f8fd76ac1c20e13ca3`;
+const cookie = `flarum_remember=XuBem0HPZyyvUWPLqjxjlwe3O1gn3SmTYfZM0Un6; wordpress_logged_in_fa686efef513bdb6e3e44099da671de0=ermander%7C1707759167%7CC9Jclq2Z2gaDBBgz3ROXniJqXhpqAFEdqZTORKMTINK%7C1a1592b39ad6ddeccb0b4666a99f3fc8992996b3fa0e7372cc4b8250dca24b2c; cookieconsent_status=dismiss`;
 const headers = { cookie };
 
 export default async function fetchRobinOdds(): Promise<void> {
@@ -55,27 +56,18 @@ export default async function fetchRobinOdds(): Promise<void> {
             dutcherOdds.push(...data.data);
         }
 
-        const odds: Array<any> = []
+        const events: Array<any> = []
             .concat(...filterOddsmatcherOdds(oddsmatcherOdds, 2, 1.5, 97))
             .concat(...filterDutcherOdds(dutcherOdds, 2, 1.5, 97))
             .concat(...filterOddsmatcherOdds(oddsmatcherOdds, 21, 2, 95))
-            .concat(...filterDutcherOdds(dutcherOdds, 21, 2, 95));
+            .concat(...filterDutcherOdds(dutcherOdds, 21, 2, 95))
+            .sort(
+                (a: any, b: any) => parseFloat(b.rating) - parseFloat(a.rating),
+            );
 
-        for (const event of odds) {
-            const message = `📈 ROI: ${event.rating}% \n🌐 ${event.home} - ${
-                event.away
-            } \n📅 ${event.date} | 🕓 ${event.hour} \n👉🏻Book 1: ${
-                event.type === 'oddsmatcher'
-                    ? RobinOddsBookmakersEnum[parseInt(event.id_book_1)]
-                    : event.book
-            } | 👉🏻Book 2: ${
-                event.type === 'oddsmatcher'
-                    ? RobinOddsBookmakersEnum[parseInt(event.id_book_2)]
-                    : event.book2
-            } \n❱❱ Bet: 1 | ${event.back_odd} \n❱❱ Bet: 2 | ${event.lay_odd}`;
-            telegramBot.sendGeneralNotification(message);
-            await sleep(2000);
-        }
+        // Prima di mandare i messaggi, voglio creare un
+
+        await sendMessages(events);
     } catch (error) {
         console.error('Error fetching RobinOdds', error);
         telegramBot.sendGeneralNotification('Error fetching RobinOdds');
@@ -127,4 +119,44 @@ const filterDutcherOdds = (
     });
 
     return events;
+};
+
+const sendMessages = async (events: Array<any>): Promise<void> => {
+    for (const event of events) {
+        const messageArray = [
+            `📈 ROI: ${event.rating}\n`,
+            `🌐 ${
+                event.type === 'oddsmatcher'
+                    ? RobinOddsBookmakersEnum[parseInt(event.id_book_1)]
+                    : event.book
+            } - [${
+                event.type === 'oddsmatcher'
+                    ? RobinOddsBookmakersEnum[parseInt(event.id_book_2)]
+                    : event.book2
+            }](${event.url})\n`,
+            `🏀 ${event.nation}. ${event.competition}\n`,
+            `📅 ${moment(event.date).format('DD/MM/YYYY')} | 🕓 ${
+                event.hour
+            }\n`,
+            `\n`,
+            `➡️ ${event.home} v ${event.away}\n`,
+            `------------------------\n`,
+        ];
+
+        // Se l'evento è di tipo oddsmatcher
+        if (event.type === 'oddsmatcher') {
+            messageArray.push(
+                // Inserisco il mercato e la selezione
+                `📊 Mercato: ${event.market}\n`,
+                `🔍 Selezione: ${event.selection}\n`,
+                `🎯 Quota punta: ${event.back_odd}\n`,
+                `🎯 Quota bancata: ${event.lay_odd}\n`,
+                `📈 Rating: ${event.rating}%\n`,
+            );
+        }
+
+        const message = messageArray.join('');
+        telegramBot.sendGeneralNotification(message);
+        await sleep(2000);
+    }
 };
