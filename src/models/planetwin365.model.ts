@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import Sisal from '@/resources/sisal/sisal.interface';
+import Planetwin from '@/resources/planetwin/planetwin.interface';
 
-const SisalSchema = new Schema(
+const PlanetwinSchema = new Schema(
     {
         key: {
             type: String,
@@ -33,4 +33,4 @@ const SisalSchema = new Schema(
     },
 );
 
-export default model<Sisal>('Sisal', SisalSchema);
+export default model<Planetwin>('Planetwin', PlanetwinSchema);

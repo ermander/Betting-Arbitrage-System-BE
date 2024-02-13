@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { SisalLinks } from '@/constants/links';
 import Telegram from '@/utils/functions/telegram';
-import mongoose from 'mongoose';
 import SisalService from '@/resources/sisal/sisal.service';
 import sleep from '@/utils/functions/sleep';
 
