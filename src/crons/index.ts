@@ -9,6 +9,7 @@ import fetchRobinOdds from './fetchRobinOdds';
 // Bookmakers
 import fetchSisal from './sisal';
 import fetchEPlayOdds from './fetchEPlayOdds';
+import fetchPlanetwin365 from './planetwin365';
 
 const jobs: any = [];
 
@@ -36,8 +37,15 @@ jobs.push(fetchRobinOddsJob);
 // jobs.push(fetchEPlayOddsJob);
 
 // Fetch Sisal matches every 30 minutes (from 8:00 to 23:00)
-const fetchSisalJob: any = schedule.scheduleJob('0,30 8-23 * * *', fetchSisal);
-jobs.push(fetchSisalJob);
+// const fetchSisalJob: any = schedule.scheduleJob('0,30 8-23 * * *', fetchSisal);
+// jobs.push(fetchSisalJob);
+
+// Fetch Planetwin365 matches every 30 minutes (from 8:00 to 23:00)
+const fetchPlanetwin365Job: any = schedule.scheduleJob(
+    '0,30 8-23 * * *',
+    fetchPlanetwin365,
+);
+jobs.push(fetchPlanetwin365Job);
 
 // Start jobs
 const startCrons = (): void => {
