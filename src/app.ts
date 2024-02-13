@@ -20,7 +20,7 @@ class App {
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
         this.initializeErrorHandling();
-        this.initializeCronJobs();
+        // this.initializeCronJobs();
     }
 
     private initializeMiddlewares(): void {
@@ -51,6 +51,7 @@ class App {
             )
             .then(() => {
                 console.log('Database connected');
+                this.initializeCronJobs();
             })
             .catch((error) => {
                 console.log(error);
