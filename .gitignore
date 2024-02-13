@@ -19,3 +19,5 @@ node_modules
 # Miscellaneous
 *.DS_Store
 Thumbs.db
+
+chromedriver
