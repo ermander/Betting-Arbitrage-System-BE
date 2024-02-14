@@ -35,12 +35,17 @@ class Telegram {
         });
     }
 
-    async sendGeneralNotification(message: string): Promise<void> {
+    async sendGeneralNotification(
+        message: string,
+        chatId: string = this.chatId,
+        reply_to_message_id: undefined | number = undefined,
+    ): Promise<void> {
         try {
             const messageTemplate = message;
-            await this.bot.sendMessage(this.chatId, messageTemplate, {
+            await this.bot.sendMessage(chatId, messageTemplate, {
                 parse_mode: 'Markdown',
                 disable_web_page_preview: true,
+                reply_to_message_id,
             });
         } catch (error) {
             console.log('Error sending general notification', error);

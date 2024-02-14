@@ -22,6 +22,9 @@ const cookie = `cookieconsent_status=dismiss; flarum_remember=zGYyZCc2u3iZp7LhSM
 const headers = { cookie };
 
 export default async function fetchRobinOdds(): Promise<void> {
+    // -1001959276045
+    // -1001959276045/2/3
+    // -1001959276045/2/3
     try {
         const { data: oddsmatcherOdds }: any = await axios.get(
             'https://robinodds.it/api/odds/v2/index.php?id_book=2,21',
@@ -70,7 +73,10 @@ export default async function fetchRobinOdds(): Promise<void> {
         await sendMessages(events);
     } catch (error) {
         console.error('Error fetching RobinOdds', error);
-        telegramBot.sendGeneralNotification('Error fetching RobinOdds');
+        telegramBot.sendGeneralNotification(
+            'Error fetching RobinOdds',
+            '-1001959276045',
+        );
     }
 }
 
@@ -124,7 +130,7 @@ const filterDutcherOdds = (
 const sendMessages = async (events: Array<any>): Promise<void> => {
     for (const event of events) {
         const messageArray = [
-            `📈 ROI: ${event.rating}\n`,
+            `📈 Rating: ${event.rating}%\n`,
             `🌐 ${
                 event.type === 'oddsmatcher'
                     ? RobinOddsBookmakersEnum[parseInt(event.id_book_1)]
@@ -151,12 +157,15 @@ const sendMessages = async (events: Array<any>): Promise<void> => {
                 `🔍 Selezione: ${event.selection}\n`,
                 `🎯 Quota punta: ${event.back_odd}\n`,
                 `🎯 Quota bancata: ${event.lay_odd}\n`,
-                `📈 Rating: ${event.rating}%\n`,
             );
         }
 
         const message = messageArray.join('');
-        telegramBot.sendGeneralNotification(message);
+        telegramBot.sendGeneralNotification(
+            message,
+            '-1001959276045',
+            event.id_book_1 === '2' ? 2 : 4,
+        );
         await sleep(2000);
     }
 };
