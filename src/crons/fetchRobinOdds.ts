@@ -18,7 +18,7 @@ const telegramBot = new Telegram(
  *
  */
 
-const cookie = `cookieconsent_status=dismiss; flarum_remember=zGYyZCc2u3iZp7LhSMs3ChBnBgQTjXKat1jlSNMg; wordpress_logged_in_fa686efef513bdb6e3e44099da671de0=ermander%7C1708007062%7C9iS5g0mjWpDbzMh1fMpp2JI3N51vZx6uAvHHEIIxFJt%7Cfd78b04934e8e28fb9f12a5785562301d9e14f7b95c3ee0e9ecf0441e59c8b30`;
+const cookie = `flarum_remember=gcdYFhJoP0zoD4SRb8lAldlONuIpfGDGj3hynAFu; wordpress_logged_in_fa686efef513bdb6e3e44099da671de0=ermander%7C1708180246%7C2hXYnpz6V8YklTeeWh7fJ6T7nFCKe9KZz8zwVfUiCPG%7C89564ea6f946e926ecc06ad2ab53108d9fd20395d5236cc359b575ec6d8fc22a`;
 const headers = { cookie };
 
 export default async function fetchRobinOdds(): Promise<void> {
